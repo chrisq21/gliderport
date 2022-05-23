@@ -1,4 +1,3 @@
-// If you don't want to use TypeScript you can delete this file!
 import * as React from "react"
 import { PageProps } from "gatsby"
 
@@ -7,6 +6,11 @@ import Seo from "../components/seo"
 import "mapbox-gl/dist/mapbox-gl.css"
 import mapboxgl from "mapbox-gl"
 
+// Chilhowee -84.591110, 35.228432
+// 42.568466666666666, -77.70881666666666
+// -112.16145, 33.084983333333334 AZ
+// 6.169066666666667, 43.86986666666667 NY
+
 const MapPage: React.FC<PageProps> = () => {
   React.useEffect(() => {
     const initMap = async () => {
@@ -14,8 +18,8 @@ const MapPage: React.FC<PageProps> = () => {
       const map = new mapboxgl.Map({
         container: "map", // container ID
         style: "mapbox://styles/mapbox/satellite-v9", // style URL
-        center: [-112.16145, 33.084983333333334],
-        zoom: 12,
+        center: [ -112.16145, 33.084983333333334],
+        zoom: 10,
         pitch: 0,
         interactive: false,
       })
@@ -64,10 +68,10 @@ const MapPage: React.FC<PageProps> = () => {
         })
 
         map.easeTo({
-          zoom: 16,
-          pitch: 80,
+          zoom: 17,
+          pitch: 70,
           curve: 1,
-          duration: 3000,
+          duration: 4000,
           easing(t) {
             return t
           },
