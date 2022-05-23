@@ -15,11 +15,13 @@ const MapPage: React.FC<PageProps> = () => {
         container: "map", // container ID
         style: "mapbox://styles/mapbox/satellite-v9", // style URL
         center: [-112.16145, 33.084983333333334],
-        zoom: 16,
+        zoom: 12,
         pitch: 0,
+        interactive: false,
       })
       map.resize()
 
+      // Wait until map loads
       await map.once("load")
 
       // Add some 3d terrain
@@ -29,7 +31,7 @@ const MapPage: React.FC<PageProps> = () => {
         tileSize: 512,
         maxzoom: 14,
       })
-      
+
       map.setTerrain({
         source: "mapbox-dem",
         exaggeration: 1.5,
@@ -37,14 +39,56 @@ const MapPage: React.FC<PageProps> = () => {
 
       // sky
       map.addLayer({
-        id: 'sky',
-        type: 'sky',
+        id: "sky",
+        type: "sky",
         paint: {
-          'sky-type': 'atmosphere',
-          'sky-atmosphere-sun': [0.0, 0.0],
-          'sky-atmosphere-sun-intensity': 15,
+          "sky-type": "atmosphere",
+          "sky-atmosphere-sun": [0.0, 0.0],
+          "sky-atmosphere-sun-intensity": 15,
         },
       })
+
+      // Wait until nothing else is loading
+      await map.once("idle")
+
+      let isPitchDone = false
+      /* Animations */
+      const movePitch = () => {
+        map.on("moveend", () => {
+          if (!isPitchDone) {
+            isPitchDone = true
+            setTimeout(() => {
+              window.requestAnimationFrame(moveBearing)
+            }, 500)
+          }
+        })
+
+        map.easeTo({
+          zoom: 16,
+          pitch: 80,
+          curve: 1,
+          duration: 3000,
+          easing(t) {
+            return t
+          },
+        })
+      }
+
+      movePitch()
+
+      const initialBearing = map.getBearing()
+      let lastTime = 0.0
+      let animationTime = 0.0
+
+      // rotate view in a circle
+      const moveBearing = time => {
+        const elapsedTime = (time - lastTime) / 1000.0
+        animationTime += elapsedTime
+        const rotation = initialBearing + animationTime * 2.0
+        map.setBearing(-rotation % 360)
+        lastTime = time
+        window.requestAnimationFrame(moveBearing)
+      }
     }
 
     initMap()
@@ -57,7 +101,7 @@ const MapPage: React.FC<PageProps> = () => {
         style={{
           padding: "2rem",
           margin: "0 auto",
-          height: "100vh",
+          height: "75vh",
           width: "100%",
           position: "relative",
         }}
