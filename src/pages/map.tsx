@@ -8,7 +8,7 @@ import mapboxgl from "mapbox-gl"
 
 // Chilhowee -84.591110, 35.228432
 // 42.568466666666666, -77.70881666666666
-// -112.16145, 33.084983333333334 AZ
+// -112.16145, 33.084983333333334 AZ`
 // 6.169066666666667, 43.86986666666667 NY
 
 const MapPage: React.FC<PageProps> = () => {
@@ -68,7 +68,7 @@ const MapPage: React.FC<PageProps> = () => {
         })
 
         map.easeTo({
-          zoom: 17,
+          zoom: 16,
           pitch: 70,
           curve: 1,
           duration: 4000,
@@ -108,6 +108,7 @@ const MapPage: React.FC<PageProps> = () => {
           height: "75vh",
           width: "100%",
           position: "relative",
+          boxShadow: '#919191 38px 9px 23px'
         }}
       >
         <div
